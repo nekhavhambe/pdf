@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* Styling for the text layer */
+    .textLayer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+
+    .textLayer > div {
+        transform-origin: 0 0;
+    }
+</style>
+<body>
+    <div id="pdfViewer"></div>
+    <canvas id="pdf-canvas"></canvas>
+    <div id="text-layer"></div>
+    <script src="./build/pdf.js"></script>
+    <script>
+        const pdfFile = './1.pdf'; // Replace with the actual path to your PDF file
+const pdfViewerContainer = document.getElementById('pdfViewer');
+
+(async () =>{
+ pdfjsLib.getDocument(pdfFile).promise.then(async (file) => {
+    const page = await file.getPage(1)
+
+const scale = 1.5;
+const viewport = page.getViewport({ scale: scale });
+
+// Create a canvas element
+const canvas = document.createElement('canvas');
+canvas.width = viewport.width;
+canvas.height = viewport.height;
+
+pdfViewerContainer.appendChild(canvas);
+
+// Render the PDF page into the canvas
+const context = canvas.getContext('2d');
+const renderContext = {
+    canvasContext: context,
+    viewport: viewport
+};
+console.log(page)
+await page.render(renderContext);
+
+const textLayerDiv = document.createElement('div');
+                        textLayerDiv.className = 'textLayer';
+                        pdfViewerContainer.appendChild(textLayerDiv);
+
+                        page.getTextContent().then(function (textContent) {
+                            // const textLayer = new pdfjsLib.TextLayerBuilder({
+                            //     textLayerDiv: textLayerDiv,
+                            //     pageIndex: 0,
+                            //     viewport: viewport
+                            // });
+
+                            console.log(pdfjsLib, '----yep');
+                            pdfjsLib.renderTextLayer({
+        textContent: textContent,
+        container:textLayerDiv,
+        viewport: viewport,
+        textDivs: []
+    });
+
+                            // textLayer.setTextContent(textContent);
+                            // textLayer.render();
+                        });
+ });
+ 
+
+
+})();
+    </script>
+</body>
+</html>
