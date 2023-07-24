@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <title>Sip Document</title>
+</head>
+
+<body>
+    <div id="pdfViewer" class="pdfViewer">
+        <div id="page1" style="display: flex;">
+          <div style="flex:1;background-color: blue;" >
+          <button id="btn">Add</button>
+          <button id="btn1">out</button>
+          </div>
+          <div id="wrapper2" style=" max-height: 600px;overflow-y: hidden;">
+          <div id="wrapper" style="position: relative; transform-origin: top left; background-color:red; width: fit-content;">
+                <canvas id="canvas"></canvas>
+            <div class="textLayer" id="text"></div>
+          </div>
+        </div>
+        </div>
+
+    </div>
+    <script src="./build/pdf.js"></script>
+   <script type="module" src="./main.js"></script>
+</body>
+
+</html>
