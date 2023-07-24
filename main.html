@@ -4,202 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="./main.css">
+    <title>Sip Document</title>
 </head>
-<style type="text/css">
-    body {
-        background: #eee;
-        font-family: Helvetica Neue, arial, sans-serif;
-        margin: 25px auto;
-        position: relative;
-        --scale-factor: 1.5;
-    }
-
-    .textLayer {
-  position: absolute;
-  text-align: initial;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  opacity: 0.25;
-  line-height: 1;
-  -webkit-text-size-adjust: none;
-     -moz-text-size-adjust: none;
-          text-size-adjust: none;
-  forced-color-adjust: none;
-  transform-origin: 0 0;
-  z-index: 2;
-}
-
-.textLayer span,
-.textLayer br {
-  color: transparent;
-  position: absolute;
-  white-space: pre;
-  cursor: text;
-  transform-origin: 0% 0%;
-}
-
-/* Only necessary in Google Chrome, see issue 14205, and most unfortunately
- * the problem doesn't show up in "text" reference tests. */
-.textLayer span.markedContent {
-  top: 0;
-  height: 0;
-}
-
-.textLayer .highlight {
-  margin: -1px;
-  padding: 1px;
-  background-color: rgba(180, 0, 170, 1);
-  border-radius: 4px;
-}
-
-.textLayer .highlight.appended {
-  position: initial;
-}
-
-.textLayer .highlight.begin {
-  border-radius: 4px 0 0 4px;
-}
-
-.textLayer .highlight.end {
-  border-radius: 0 4px 4px 0;
-}
-
-.textLayer .highlight.middle {
-  border-radius: 0;
-}
-
-.textLayer .highlight.selected {
-  background-color: rgba(0, 100, 0, 1);
-}
-
-.textLayer ::-moz-selection {
-  background: blue;
-  background: AccentColor;
-}
-
-.textLayer ::selection {
-  background: blue;
-  background: AccentColor;
-}
-
-/* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
-.textLayer br::-moz-selection {
-  background: transparent;
-}
-.textLayer br::selection {
-  background: transparent;
-}
-
-.textLayer .endOfContent {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  cursor: default;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-}
-
-.textLayer .endOfContent.active {
-  top: 0;
-}
-
-    .pdfViewer {
-        position: relative;
-    }
-</style>
 
 <body>
-    <div id="pdfViewer">
-        <div id="page1" style="position: relative;">
-            <div id="wrapper">
+    <div id="pdfViewer" class="pdfViewer">
+        <div id="page1" style="display: flex;">
+          <div style="flex:1;background-color: blue;" >
+          <button id="btn">Add</button>
+          <button id="btn1">out</button>
+          </div>
+          <div id="wrapper2" style=" max-height: 600px;overflow-y: hidden;">
+          <div id="wrapper" style="position: relative; transform-origin: top left; background-color:red; width: fit-content;">
                 <canvas id="canvas"></canvas>
-            </div>
-
             <div class="textLayer" id="text"></div>
+          </div>
+        </div>
         </div>
 
     </div>
     <script src="./build/pdf.js"></script>
-    <script>
-        const pdfFile = './1.pdf'; // Replace with the actual path to your PDF file
-        const pdfViewerContainer = document.getElementById('pdfViewer');
-
-        (async () => {
-            pdfjsLib.getDocument(pdfFile).promise.then(async (file) => {
-                const page = await file.getPage(1)
-
-
-
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale: scale });
-
-                // Create a canvas element
-                let page1 = document.getElementById('page1');
-                let canvas = document.getElementById('canvas');
-                let wrapper = document.getElementById('wrapper');
-                let textLayer = document.getElementById('text');
-
-                page1.className = 'page';
-                wrapper.className = 'canvasWrapper';
-                textLayer.className = 'textLayer';
-
-                let viewer = document.getElementById('pdfViewer');
-                viewer.appendChild(page1);
-
-
-                //
-
-
-
-                let canvasContext = canvas.getContext('2d');
-
-                canvas.width = viewport.width * 2;
-                canvas.height = viewport.height * 2;
-                page1.style.width = `${viewport.width}px`;
-                page1.style.height = `${viewport.height}px`;
-                wrapper.style.width = `${viewport.width}px`;
-                wrapper.style.height = `${viewport.height}px`;
-                pdfViewerContainer.style.width = `${viewport.width}px`;
-                pdfViewerContainer.style.height = `${viewport.height}px`;
-
-                // Render the PDF page into the canvas
-                const context = canvas.getContext('2d');
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                console.log(page)
-                await page.render(renderContext);
-
-
-                page.getTextContent().then(function (textContent) {
-                    // const textLayer = new pdfjsLib.TextLayerBuilder({
-                    //     textLayerDiv: textLayerDiv,
-                    //     pageIndex: 0,
-                    //     viewport: viewport
-                    // });
-                    pdfjsLib.renderTextLayer({
-                        textContentSource: textContent,
-                        container: textLayer,
-                        viewport,
-                        textDivs: []
-                    });
-                });
-            });
-
-
-
-        })();
-    </script>
+   <script type="module" src="./main.js"></script>
 </body>
 
 </html>
